@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppBar, Toolbar, Box, styled, Typography, InputBase, Badge, Avatar, Menu, MenuItem } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate } from "react-router-dom";
-
+import NavbarLogic from './NavbarLogic';
+import { serverUrl } from '../../config';
 
 const SyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -38,33 +39,33 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 
 
-function Navbar() {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+function Navbar({userId}) {
+  const { navigate, handleClick, handleClose, setAnchorEl, anchorEl, open, getImage } = NavbarLogic();
+
   return (
     <AppBar position='sticky'>
       <SyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", ms: "block" } }}>SocialSphere</Typography>
-        <PublicIcon sx={{ display: { xs: "block", ms: "none" } }} onClick={e=>navigate("/")} />
+        <PublicIcon sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate("/")} />
         <Search><InputBase placeholder='search...' /></Search>
-        <Icons>
+        {/* <Icons>
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
           <Badge badgeContent={2} color="error">
             <NotificationsIcon />
           </Badge>
-          <Avatar onClick={e => setOpen(true)} sx={{ width: "30", height: "30" }} src="https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/3/31/1427823466140/1fe69f2c-59d6-4e07-ab3a-8b60dbe35db2-1020x1020.jpeg?width=700&quality=85&auto=format&fit=max&s=488d904c14758c38d8010de62c742e4b" />
-        </Icons>
-        <UserBox onClick={e => setOpen(true)}>
-          <Avatar sx={{ width: "30", height: "30" }} src="https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/3/31/1427823466140/1fe69f2c-59d6-4e07-ab3a-8b60dbe35db2-1020x1020.jpeg?width=700&quality=85&auto=format&fit=max&s=488d904c14758c38d8010de62c742e4b" />
+          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/profileImage`} />
+        </Icons> */}
+        <UserBox onClick={handleClick}>
+          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users//profileImage`} />
           <Typography variant='span'>John</Typography>
         </UserBox>
       </SyledToolbar>
       <Menu
         id="positioned-menu"
         open={open}
-        onClose={e => setOpen(false)}
+        onClose={handleClose}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
@@ -73,9 +74,17 @@ function Navbar() {
           vertical: 'top',
           horizontal: 'right',
         }}
+        anchorEl={anchorEl}
       >
-        <MenuItem onClick={e => navigate("/")}>Profile</MenuItem>
-        <MenuItem >My account</MenuItem>
+        <MenuItem onClick={(e) => {
+          navigate("/");
+          setAnchorEl(null)
+        }
+        }>Profile</MenuItem>
+        <MenuItem onClick={(e) => {
+          navigate("/account");
+          setAnchorEl(null)
+        }}>My account</MenuItem>
         <MenuItem >Logout</MenuItem>
       </Menu>
     </AppBar>

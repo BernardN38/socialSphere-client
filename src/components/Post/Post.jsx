@@ -1,36 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { Card, CardHeader, CardMedia, Typography, IconButton, CardContent, CardActions, Checkbox, Menu, MenuItem } from "@mui/material";
+import React, { useEffect } from 'react'
+import { Card, CardHeader, CardMedia, Typography, IconButton, CardContent, CardActions, Menu, MenuItem, Button, Collapse, Avatar, Badge } from "@mui/material";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PostLogic from "./PostLogic";
-import UserAvatar from '../UserAvatar/UserAvatar';
+import Comment from '../Comment/Comment';
+import { v4 as uuid } from "uuid";
+import AddComment from '../AddComment/AddComment';
+import { serverUrl } from "../../config"
 
-
-function Post({ authorName, body, date, imageId, postId, deletePost }) {
-  const { source, convertDate, initPost, initMenu, anchorRef, open, setOpen, checkLike, isLiked, handleLike } = PostLogic(imageId, postId);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpen(!open)
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-    setOpen(!open)
-  };
+function Post({ authorName, body, date, imageId, postId, deletePost, userId, likeCount }) {
+  console.count(postId)
+  const { convertDate, initMenu, anchorRef, open,
+    checkLike, isLiked, handleLike, getComments,
+    comments, setComments, likes, handleClick,
+    handleClose, anchorEl, imgSrc, setImgSrc,
+    setExpanded, expanded } = PostLogic(imageId, postId, likeCount);
   useEffect(() => {
-
-    initPost();
     initMenu();
     checkLike();
-
   }, [postId])
   return (
     <Card sx={{ marginTop: 1 }}>
       <CardHeader
         avatar={
-          <UserAvatar />
+          <Avatar sx={{ width: "35", height: "35" }} src={`${serverUrl}/users/${userId}/profileImage`} />
         }
         action={
           <IconButton aria-label="settings" ref={anchorRef}
@@ -62,8 +57,15 @@ function Post({ authorName, body, date, imageId, postId, deletePost }) {
       >
         <MenuItem onClick={() => { deletePost(imageId, postId) }}>Delete</MenuItem>
       </Menu>
-      {source ? <CardMedia
-        src={source}
+      {imageId ? <CardMedia
+        src={imgSrc}
+        onError={(e) => {
+          console.log(e)
+          const timer = setTimeout(() => {
+            setImgSrc(`${serverUrl}/image/${imageId}?`)
+          }, 1000);
+          return () => clearTimeout(timer);
+        }}
         component="img"
         height="200px"
         alt="None"
@@ -73,14 +75,28 @@ function Post({ authorName, body, date, imageId, postId, deletePost }) {
           {body}
         </Typography>
       </CardContent>
+      <Button onClick={(e) => {
+        if (!comments) {
+          getComments();
+        }
+        setExpanded(!expanded)
+      }} fullWidth>Comments...</Button>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" onClick={handleLike}>
-          <Checkbox icon={<FavoriteBorder />} checked={isLiked} checkedIcon={<Favorite sx={{ color: "red" }} />} />
+        <IconButton onClick={handleLike}>
+          <Badge badgeContent={likes} color="primary" >
+            {isLiked ? <Favorite sx={{ color: "red" }} /> : <FavoriteBorder />}
+          </Badge>
         </IconButton>
-        <IconButton aria-label="share">
+        {/* <IconButton aria-label="share">
           <ShareIcon />
-        </IconButton>
+        </IconButton> */}
       </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <AddComment comments={comments} setComments={setComments} postId={postId} />
+          {comments ? comments.map(c => <Comment key={uuid()} authorName={c.AuthorName} userId={c.UserID} body={c.Body} />) : ''}
+        </CardContent>
+      </Collapse>
     </Card>
   )
 }

@@ -5,21 +5,19 @@ import Feed from "../../components/Feed/Feed";
 import Rightbar from "../../components/RightBar/Rightbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 
 function Profile() {
+  let { userId } = useParams();
   const [refresh, setRefresh] = useState(false);
-  const [mobile, setMobile] = useState(false);
   const { innerWidth: width, innerHeight: height } = window;
-  useEffect(() => {
 
-
-  }, [])
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between">
-        {width > 500 ? <Sidebar /> : ""}
-        <Feed refresh={refresh} />
+        {/* {width > 500 ? <Sidebar /> : ""} */}
+        <Feed userId={userId} refresh={refresh} />
         {width > 500 ? <Rightbar /> : ""}
 
       </Stack>

@@ -1,14 +1,32 @@
-import React from 'react'
-import { Box, Typography, Avatar, AvatarGroup, ImageList, ImageListItem, List, ListItem,ListItemAvatar,ListItemText,Divider } from "@mui/material";
+import React, { useState } from 'react'
+import { Box, Button, Typography, Avatar, AvatarGroup, ImageList, ImageListItem, List, ListItem, ListItemText, Divider, Collapse, TextField } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { v4 as uuid } from 'uuid';
+import { serverUrl } from '../../config';
 
 
-
+const client = new W3CWebSocket('ws://192.168.0.17:8081/messaging');
 
 function Rightbar() {
-  console.log("rightbar loaded")
+  const [messages, setMessges] = useState({});
+  const [expanded,setExpanded] = useState(false);
+  client.onopen = () => {
+    console.log('WebSocket Client Connected');
+  };
+  client.onmessage = (event) => {
+    const jsonData = JSON.parse(event.data)
+    const payload = JSON.parse(jsonData.Payload)
+    setMessges({ ...messages, [payload.fromUserName]: { from: payload.from, subject: payload.subject, message: payload.message } })
+  };
+  function sendWsMessage(e, toId) {
+    e.preventDefault()
+    const form = new FormData(e.currentTarget)
+    client.send(JSON.stringify({ message: form.get("message"), to: toId || form.get("to"), subject: form.get("subject") }))
+  }
   return (
     <Box flex={2} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
-      <Box position="fixed" width={380} mt={2}>
+      <Box position="fixed" width={"30%"} mt={2}>
         <Typography variant="h6" fontWeight={100}>
           Online friends
         </Typography>
@@ -23,91 +41,72 @@ function Rightbar() {
           Latest Photos
         </Typography>
         <ImageList cols={3} rowHeight={150}>
-            <ImageListItem >
-              <img
-                src="https://material-ui.com/static/images/image-list/breakfast.jpg"
-              />
-            </ImageListItem>
-            <ImageListItem >
-              <img
-                src="https://material-ui.com/static/images/image-list/burgers.jpg"
-              />
-            </ImageListItem><ImageListItem >
-              <img
-                src="https://material-ui.com/static/images/image-list/camera.jpg"
-              />
-            </ImageListItem>
+          <ImageListItem >
+            <img
+              src="https://material-ui.com/static/images/image-list/breakfast.jpg"
+            />
+          </ImageListItem>
+          <ImageListItem >
+            <img
+              src="https://material-ui.com/static/images/image-list/burgers.jpg"
+            />
+          </ImageListItem><ImageListItem >
+            <img
+              src="https://material-ui.com/static/images/image-list/camera.jpg"
+            />
+          </ImageListItem>
         </ImageList>
         <Typography variant="h6" fontWeight={100}>
           Latest Conversations
         </Typography>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="https://material-ui.com/static/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Sandra Adams
-              </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-    </List>
+
+
+          {Object.keys(messages).map((key) => {
+            return (
+              <div key={uuid()} >
+
+                <ListItem alignItems="flex-start" sx={{ display: "flex", alignItems: "center" }}>
+                  <AvatarGroup sx={{ marginRight: "5px" }}>
+                    <Avatar alt="From user" src={`${serverUrl}/users/${messages[key]["from"]}/profileImage`} />
+                    {/* (<img src={process.env.PUBLIC_URL + '/online.png'} height="13px" alt="logo" />) */}
+                  </AvatarGroup>
+                  <ListItemText
+                    primary={messages[key]["subject"]}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          @{key}
+                        </Typography>
+                        —{messages[key]["message"]}
+                      </React.Fragment>
+                    }
+                  />
+                  <Button onClick={()=>{setExpanded(true)}} >reply</Button>
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "right", width: "100%", marginBottom: "3px" }}>
+                    <form onSubmit={(e)=>{sendWsMessage(e,messages[key]["from"])}}>
+                      <TextField id="standard-basic" label="Reply" variant="standard"  name='message'/>
+                      <Button type="submit" size='large'><SendIcon /></Button>
+                    </form>
+                  </Box>
+                </Collapse>
+              </div>)
+          })}
+        </List>
+        <form onSubmit={sendWsMessage}>
+          <input name={"to"} placeholder={"to"} />
+          <input name={"message"} placeholder={"message"} />
+          <input name={"subject"} placeholder={"subject"} />
+          <Button type="submit" size='large'>test</Button>
+        </form>
       </Box>
     </Box>
   )

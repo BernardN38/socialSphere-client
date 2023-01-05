@@ -5,6 +5,7 @@ import EmojiEmotions from '@mui/icons-material/EmojiEmotions';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AddPost from "./AddPostLogic";
+import { serverUrl } from '../../config';
 
 const StyledModal = styled(Modal)({
     display: "flex",
@@ -19,7 +20,7 @@ const UserBox = styled(Box)({
     marginBottom: "20px"
 })
 
-function Add({setRefresh, refresh}) {
+function Add({setRefresh, refresh, userId}) {
     const { open, setOpen, createPost } = AddPost(setRefresh, refresh);
     return (
         <>
@@ -40,7 +41,7 @@ function Add({setRefresh, refresh}) {
                             Create Post
                         </Typography>
                         <UserBox>
-                            <Avatar src="https://material-ui.com/static/images/avatar/3.jpg" />
+                        <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users//profileImage`} />
                             <Typography> John Doe</Typography>
                         </UserBox>
                         <TextField sx={{ width: "100%" }} multiline rows={3} placeholder="Whats on your mind" variant="standard" name="body" />

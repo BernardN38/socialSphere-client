@@ -9,9 +9,10 @@ function LoginLogic(){
       const data = new FormData(event.currentTarget);
       axios.post(`${serverUrl}/login`, data, { withCredentials: true, headers: { "Content-Type": "application/json" } }).then((resp) => {
         if (resp.status === 200) {
-          navigate("/");
+          console.log(resp.data)
+          navigate(`/users/${resp.data}`);
         }
-      })
+      }).catch(e=>console.log(e.message))
     };
     return {handleSubmit}
 }

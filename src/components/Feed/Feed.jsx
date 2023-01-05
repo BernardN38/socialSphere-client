@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import Post from '../Post/Post';
 import InfiniteScroll from "react-infinite-scroll-component";
 import FeedLogic from './FeedLogic';
-import {v4 as uuid} from "uuid";
+
 
 
 
@@ -14,12 +14,11 @@ const endMessage = () => {
   </p>)
 }
 
-function Feed({ pageSize = 5, refresh }) {
-  const { posts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize);
+function Feed({ pageSize = 5, userId, refresh }) {
+  const { posts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize, userId);
   useEffect(() => {
     initFeed();
-  }, [refresh])
-  console.log(posts)
+  }, [refresh, userId])
   return (
     <Box flex={4} p={2}>{
       posts ?
@@ -41,7 +40,7 @@ function Feed({ pageSize = 5, refresh }) {
           
         >
           {
-            posts.map((el) => <Post key={el.ID} postId={el.ID} authorName={el.AuthorName} body={el.Body} date={el.CreatedAt} imageId={el.ImageID} deletePost={deletePost}/>)
+            posts.map((el) => <Post key={el.ID} postId={el.ID} authorName={el.AuthorName} userId={el.UserID}body={el.Body} date={el.CreatedAt} imageId={el.ImageID} deletePost={deletePost} likeCount={el.Likecount}/>)
           }
         </InfiniteScroll> : "Nothing to see here"
     }
