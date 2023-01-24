@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EmojiEmotions from '@mui/icons-material/EmojiEmotions';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import AddPost from "./AddPostLogic";
+import AddPostLogic from "./AddPostLogic";
 import { serverUrl } from '../../config';
 
 const StyledModal = styled(Modal)({
@@ -20,8 +20,8 @@ const UserBox = styled(Box)({
     marginBottom: "20px"
 })
 
-function Add({setRefresh, refresh, userId}) {
-    const { open, setOpen, createPost } = AddPost(setRefresh, refresh);
+function AddPost({setRefresh, refresh, userId}) {
+    const { open, setOpen, createPost } = AddPostLogic(setRefresh, refresh);
     return (
         <>
             <Tooltip onClick={e => setOpen(true)} title="Delete" sx={{ position: "fixed", bottom: 20, left: { xs: "calc(50% - 25px)", md: 30 } }}>
@@ -48,7 +48,7 @@ function Add({setRefresh, refresh, userId}) {
                         <Stack direction="row" mt={2} mb={3}>
                             <IconButton><EmojiEmotions color="primary" /></IconButton>
                             <IconButton color="primary" aria-label="upload picture" component="label">
-                                <input hidden accept="image/*" type="file" name="image" />
+                                <input hidden accept="image/jpeg, image/png" type="file" name="image" />
                                 <PhotoCameraIcon />
                             </IconButton>
                         </Stack>
@@ -63,4 +63,4 @@ function Add({setRefresh, refresh, userId}) {
     )
 }
 
-export default Add;
+export default AddPost;

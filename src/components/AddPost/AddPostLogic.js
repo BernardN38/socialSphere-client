@@ -4,7 +4,7 @@ import { serverUrl } from '../../config';
 import { useNavigate } from 'react-router-dom';
 
 
-function AddPost(setRefresh, refresh) {
+function AddPostLogic(setRefresh, refresh) {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     
@@ -27,4 +27,4 @@ function AddPost(setRefresh, refresh) {
     return { open, setOpen, createPost }
 }
 
-export default AddPost;
+export default AddPostLogic;

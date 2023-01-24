@@ -17,6 +17,7 @@ function Rightbar() {
   client.onmessage = (event) => {
     const jsonData = JSON.parse(event.data)
     const payload = JSON.parse(jsonData.Payload)
+    console.log(payload)
     setMessges({ ...messages, [payload.fromUserName]: { from: payload.from, subject: payload.subject, message: payload.message } })
   };
   function sendWsMessage(e, toId) {
@@ -63,6 +64,7 @@ function Rightbar() {
 
 
           {Object.keys(messages).map((key) => {
+           
             return (
               <div key={uuid()} >
 
@@ -92,7 +94,10 @@ function Rightbar() {
                 <Divider variant="inset" component="li" />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <Box sx={{ display: "flex", alignItems: "center", justifyContent: "right", width: "100%", marginBottom: "3px" }}>
-                    <form onSubmit={(e)=>{sendWsMessage(e,messages[key]["from"])}}>
+                    <form onSubmit={(e)=>{
+                      sendWsMessage(e,messages[key]["from"]);
+                      console.log(e.target)
+                      }}>
                       <TextField id="standard-basic" label="Reply" variant="standard"  name='message'/>
                       <Button type="submit" size='large'><SendIcon /></Button>
                     </form>

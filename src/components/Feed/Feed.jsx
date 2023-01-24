@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import Post from '../Post/Post';
 import InfiniteScroll from "react-infinite-scroll-component";
 import FeedLogic from './FeedLogic';
-
+import UserHeader from "../UserHeader/UserHeader"
 
 
 
@@ -20,8 +20,9 @@ function Feed({ pageSize = 5, userId, refresh }) {
     initFeed();
   }, [refresh, userId])
   return (
-    <Box flex={4} p={2}>{
-      posts ?
+    <Box flex={4} p={2}>
+    <UserHeader/>
+    {posts ?
         <InfiniteScroll
           dataLength={posts.length} //This is important field to render the next data
           next={e => getNext(pageSize)}
@@ -42,8 +43,7 @@ function Feed({ pageSize = 5, userId, refresh }) {
           {
             posts.map((el) => <Post key={el.ID} postId={el.ID} authorName={el.AuthorName} userId={el.UserID}body={el.Body} date={el.CreatedAt} imageId={el.ImageID} deletePost={deletePost} likeCount={el.Likecount}/>)
           }
-        </InfiniteScroll> : "Nothing to see here"
-    }
+        </InfiniteScroll> : "Nothing to see here"}
     </Box>
   )
 }

@@ -47,7 +47,7 @@ function Navbar({userId}) {
       <SyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", ms: "block" } }}>SocialSphere</Typography>
         <PublicIcon sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate("/")} />
-        <Search><InputBase placeholder='search...' /></Search>
+        {/* <Search><InputBase placeholder='search...' /></Search> */}
         {/* <Icons>
           <Badge badgeContent={4} color="error">
             <MailIcon />

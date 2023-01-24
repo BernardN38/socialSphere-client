@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Box, Stack } from "@mui/material";
-import Add from "../../components/Add/Add"
+import AddPost from "../../components/AddPost/AddPost"
 import Feed from "../../components/Feed/Feed";
 import Rightbar from "../../components/RightBar/Rightbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import UserHeader from "../../components/UserHeader/UserHeader";
 
 
 function Profile() {
@@ -15,13 +16,15 @@ function Profile() {
 
   return (
     <Box>
+      {/* <UserHeader/> */}
       <Stack direction="row" justifyContent="space-between">
-        {/* {width > 500 ? <Sidebar /> : ""} */}
+        {width > 500 ? <Sidebar /> : ""}
+        
         <Feed userId={userId} refresh={refresh} />
         {width > 500 ? <Rightbar /> : ""}
 
       </Stack>
-      <Add setRefresh={setRefresh} refresh={refresh} />
+      <AddPost setRefresh={setRefresh} refresh={refresh} />
     </Box>
   );
 }

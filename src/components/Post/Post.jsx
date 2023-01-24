@@ -76,10 +76,7 @@ function Post({ authorName, body, date, imageId, postId, deletePost, userId, lik
         </Typography>
       </CardContent>
       <Button onClick={(e) => {
-        if (!comments) {
           getComments();
-        }
-        setExpanded(!expanded)
       }} fullWidth>Comments...</Button>
       <CardActions disableSpacing>
         <IconButton onClick={handleLike}>
@@ -87,14 +84,11 @@ function Post({ authorName, body, date, imageId, postId, deletePost, userId, lik
             {isLiked ? <Favorite sx={{ color: "red" }} /> : <FavoriteBorder />}
           </Badge>
         </IconButton>
-        {/* <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton> */}
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <AddComment comments={comments} setComments={setComments} postId={postId} />
-          {comments ? comments.map(c => <Comment key={uuid()} authorName={c.AuthorName} userId={c.UserID} body={c.Body} />) : ''}
+          {comments ? comments.map(c => <Comment key={uuid()} authorName={c.AuthorName} userId={c.UserID} body={c.Body} />) : ' No comments here'}
         </CardContent>
       </Collapse>
     </Card>

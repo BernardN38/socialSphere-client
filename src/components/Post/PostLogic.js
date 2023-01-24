@@ -8,9 +8,9 @@ const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "O
 function PostLogic(imageId, postId, likesCount) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
-  const [likes,setLikes] = useState(likesCount);
+  const [likes, setLikes] = useState(likesCount);
   const [expanded, setExpanded] = useState(false);
   const [imgSrc, setImgSrc] = useState(`${serverUrl}/image/${imageId}`);
   const anchorRef = useRef(null);
@@ -57,14 +57,14 @@ function PostLogic(imageId, postId, likesCount) {
   const addLike = () => {
     axios.post(`${serverUrl}/posts/${postId}/likes`, null, { withCredentials: true }).then((resp) => {
       console.log(resp.data)
-      setLikes(likes+1)
+      setLikes(likes + 1)
       setIsLiked(true)
     })
   }
   const deleteLike = () => {
     axios.delete(`${serverUrl}/posts/${postId}/likes`, { withCredentials: true }).then((resp) => {
       console.log(resp.data)
-      setLikes(likes-1)
+      setLikes(likes - 1)
       setIsLiked(false)
     })
   }
@@ -73,21 +73,29 @@ function PostLogic(imageId, postId, likesCount) {
       setIsLiked(resp.data)
     })
   }
-  const getComments= () => {
-    axios.get(`${serverUrl}/posts/${postId}/comments`, {withCredentials:true}).then((resp)=>{
-      const respJson = JSON.parse(resp.data.data)
-      setComments(respJson)
-    })
+  const getComments = () => {
+    if (comments.length === 0) {
+      axios.get(`${serverUrl}/posts/${postId}/comments`, { withCredentials: true }).then((resp) => {
+        console.log(resp.data)
+        const respJson = JSON.parse(resp.data.data);
+         if (respJson === null) {
+          console.log('no comments for post ', postId, expanded)
+         } else {
+          setComments(respJson);
+         }
+      })
+    }
+    setExpanded(!expanded);
   }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setOpen(!open)
+    setOpen(!open);
   };
   const handleClose = () => {
     setAnchorEl(null);
     setOpen(!open)
   };
-  return {  convertDate,  initMenu, handleToggle, handleClick, handleClose, handleCloseMenu, handleListKeyDown, anchorRef, anchorEl, open, setOpen,likes, deletePost, addLike, deleteLike, checkLike,getComments,comments, setComments, isLiked, handleLike, handleClick, handleClose, imgSrc, setImgSrc, setExpanded,expanded }
+  return { convertDate, initMenu, handleToggle, handleClick, handleClose, handleCloseMenu, handleListKeyDown, anchorRef, anchorEl, open, setOpen, likes, deletePost, addLike, deleteLike, checkLike, getComments, comments, setComments, isLiked, handleLike, handleClick, handleClose, imgSrc, setImgSrc, setExpanded, expanded }
 }
 
 export default PostLogic;
