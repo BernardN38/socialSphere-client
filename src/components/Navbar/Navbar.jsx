@@ -85,6 +85,10 @@ function Navbar({userId}) {
           navigate("/account");
           setAnchorEl(null)
         }}>My account</MenuItem>
+        <MenuItem onClick={(e) => {
+          navigate("/friends");
+          setAnchorEl(null)
+        }}>Friends</MenuItem>
         <MenuItem >Logout</MenuItem>
       </Menu>
     </AppBar>
