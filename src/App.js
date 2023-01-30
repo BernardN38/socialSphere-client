@@ -4,6 +4,7 @@ import Layout from "./pages/Layout/Layout";
 import Login from "./pages/Login/Login";
 import Account from "./pages/Account/Account";
 import Friends from "./pages/Friends/Friends";
+
 function App() {
   return (
     <BrowserRouter>

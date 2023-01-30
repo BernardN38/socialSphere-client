@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import {useOutletContext } from "react-router-dom"
 import { Box, List, ListItem, ListItemButton, ListItemText, Switch } from "@mui/material";
 import ListItemIcon from '@mui/material/ListItemIcon';
 import HomeIcon from '@mui/icons-material/Home';
@@ -6,6 +7,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from 'react-router-dom';
 function Sidebar() {
+  
   const navigate = useNavigate();
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>

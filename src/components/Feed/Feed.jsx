@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import { useOutletContext } from "react-router-dom";
 import { Box } from "@mui/material";
 import Post from '../Post/Post';
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -14,14 +15,14 @@ const endMessage = () => {
   </p>)
 }
 
-function Feed({ pageSize = 5, userId, refresh }) {
+function Feed({ pageSize = 5, userId }) {
   const { posts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize, userId);
   useEffect(() => {
     initFeed();
-  }, [refresh, userId])
+  }, [userId])
   return (
     <Box flex={4} p={2}>
-    <UserHeader/>
+    <UserHeader userId={userId}/>
     {posts ?
         <InfiniteScroll
           dataLength={posts.length} //This is important field to render the next data

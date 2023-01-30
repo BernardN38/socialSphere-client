@@ -1,6 +1,5 @@
-
-
 import * as React from 'react';
+import { useOutletContext } from "react-router-dom";
 import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoginLogic from './LoginLogic';
@@ -21,7 +20,9 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const { handleSubmit } = LoginLogic();
+  const [userId,setUserId] = useOutletContext();
+  const { handleSubmit } = LoginLogic(userId,setUserId);
+  console.log(userId,setUserId)
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

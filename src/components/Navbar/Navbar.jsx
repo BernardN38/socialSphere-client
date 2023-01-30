@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useOutletContext } from "react-router-dom";
 import { AppBar, Toolbar, Box, styled, Typography, InputBase, Badge, Avatar, Menu, MenuItem } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate } from "react-router-dom";
 import NavbarLogic from './NavbarLogic';
 import { serverUrl } from '../../config';
 
@@ -38,6 +36,14 @@ const UserBox = styled(Box)(({ theme }) => ({
 }))
 
 
+const linkStyles = {
+  textDecoration: 'none',
+  cursor: 'pointer',
+  '&:hover': {
+      textDecoration: 'underline',
+  },
+}
+
 
 function Navbar({userId}) {
   const { navigate, handleClick, handleClose, setAnchorEl, anchorEl, open, getImage } = NavbarLogic();
@@ -46,7 +52,7 @@ function Navbar({userId}) {
     <AppBar position='sticky'>
       <SyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", ms: "block" } }}>SocialSphere</Typography>
-        <PublicIcon sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate("/")} />
+        <PublicIcon style={linkStyles} sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate(`/users/${userId}`)} />
         {/* <Search><InputBase placeholder='search...' /></Search> */}
         {/* <Icons>
           <Badge badgeContent={4} color="error">
@@ -58,7 +64,7 @@ function Navbar({userId}) {
           <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/profileImage`} />
         </Icons> */}
         <UserBox onClick={handleClick}>
-          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users//profileImage`} />
+          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/${userId}/profileImage`} />
           <Typography variant='span'>John</Typography>
         </UserBox>
       </SyledToolbar>
@@ -77,7 +83,7 @@ function Navbar({userId}) {
         anchorEl={anchorEl}
       >
         <MenuItem onClick={(e) => {
-          navigate("/");
+          navigate(`/users/${userId}`);
           setAnchorEl(null)
         }
         }>Profile</MenuItem>

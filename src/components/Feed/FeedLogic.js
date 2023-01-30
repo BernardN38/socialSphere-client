@@ -24,6 +24,8 @@ function FeedLogic(pageSize = 5, userId ) {
                 setHasMore(false)
             }
             setPosts([...posts, ...resp.data.data.page])
+        }).catch((err)=>{
+            console.log(err.response)
         })
     }
 
@@ -32,8 +34,9 @@ function FeedLogic(pageSize = 5, userId ) {
             console.log(resp.data)
             setPosts(resp.data.data.page)
         }).catch((error) => {
-            console.log(error)
+            console.log(error.response)
             if (error.response.status === 401) {
+                localStorage.removeItem("userId")
                 navigate("/login")
             }
         })

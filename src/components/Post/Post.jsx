@@ -11,7 +11,6 @@ import AddComment from '../AddComment/AddComment';
 import { serverUrl } from "../../config"
 
 function Post({ authorName, body, date, imageId, postId, deletePost, userId, likeCount }) {
-  console.count(postId)
   const { convertDate, initMenu, anchorRef, open,
     checkLike, isLiked, handleLike, getComments,
     comments, setComments, likes, handleClick,

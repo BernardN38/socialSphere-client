@@ -18,7 +18,7 @@ function Profile() {
     <Box>
       {/* <UserHeader/> */}
       <Stack direction="row" justifyContent="space-between">
-        {width > 500 ? <Sidebar /> : ""}
+        {width > 500 ? <Sidebar userId={userId} /> : ""}
         
         <Feed userId={userId} refresh={refresh} />
         {width > 500 ? <Rightbar /> : ""}
