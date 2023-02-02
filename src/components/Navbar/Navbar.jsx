@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Box, styled, Typography, InputBase, Badge, Avatar, Men
 import PublicIcon from '@mui/icons-material/Public';
 import NavbarLogic from './NavbarLogic';
 import { serverUrl } from '../../config';
+import Notification from '../Notification/Notification';
 
 const SyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -40,12 +41,12 @@ const linkStyles = {
   textDecoration: 'none',
   cursor: 'pointer',
   '&:hover': {
-      textDecoration: 'underline',
+    textDecoration: 'underline',
   },
 }
 
 
-function Navbar({userId}) {
+function Navbar({ userId }) {
   const { navigate, handleClick, handleClose, setAnchorEl, anchorEl, open, getImage } = NavbarLogic();
 
   return (
@@ -53,19 +54,15 @@ function Navbar({userId}) {
       <SyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", ms: "block" } }}>SocialSphere</Typography>
         <PublicIcon style={linkStyles} sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate(`/users/${userId}`)} />
-        {/* <Search><InputBase placeholder='search...' /></Search> */}
-        {/* <Icons>
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-          <Badge badgeContent={2} color="error">
-            <NotificationsIcon />
-          </Badge>
+        <Icons>
+          {/* <Notification /> */}
+
           <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/profileImage`} />
-        </Icons> */}
-        <UserBox onClick={handleClick}>
-          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/${userId}/profileImage`} />
-          <Typography variant='span'>John</Typography>
+        </Icons>
+        <UserBox >
+        <Notification />
+          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/${userId}/profileImage`} onClick={handleClick} />
+          {/* <Typography variant='span'>John</Typography> */}
         </UserBox>
       </SyledToolbar>
       <Menu
@@ -97,6 +94,7 @@ function Navbar({userId}) {
         }}>Friends</MenuItem>
         <MenuItem >Logout</MenuItem>
       </Menu>
+
     </AppBar>
   )
 }

@@ -15,11 +15,11 @@ const endMessage = () => {
   </p>)
 }
 
-function Feed({ pageSize = 5, userId }) {
-  const { posts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize, userId);
+function Feed({ pageSize = 5, userId, refresh }) {
+  const { posts, setPosts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize, userId);
   useEffect(() => {
     initFeed();
-  }, [userId])
+  }, [userId, refresh])
   return (
     <Box flex={4} p={2}>
     <UserHeader userId={userId}/>

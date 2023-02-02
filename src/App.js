@@ -15,6 +15,7 @@ function App() {
           <Route path="login" element={<Login/>}/>
           <Route path="account" element={<Account/>}/>
           <Route path="friends" element={<Friends/>}/>
+          
         </Route>
       </Routes>
     </BrowserRouter>

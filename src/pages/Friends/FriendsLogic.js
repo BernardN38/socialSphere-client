@@ -18,7 +18,7 @@ function FriendsLogic() {
             setFoundUsers(resp.data)
             setExpanded(false)
         }).catch((err) => {
-            console.log(err.response.status)
+            console.log(err.response)
         })
     }
     return { handleFindFriends, foundUsers, expanded, setExpanded }

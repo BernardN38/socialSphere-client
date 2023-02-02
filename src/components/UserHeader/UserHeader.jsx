@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Avatar, Box, Button, Link, Stack } from '@mui/material';
+import { Card, Avatar, Box, Button, Link, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import UserHeaderLogic from './UserHeaderLogic';
 import { serverUrl } from '../../config';
@@ -28,7 +28,7 @@ function UserHeader({ username, userId }) {
             <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", height: "80%" }}>
                 <Avatar sx={{ marginTop: "5px" }} src={`${serverUrl}/users/${userId}/profileImage`} />
                 <Link style={linkStyles} onClick={() => { navigate(`/users/${userId}`) }}>{userData.Username}</Link>
-
+                <Typography>{userData.FirstName} {userData.LastName}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: "center" }}>
                 <Button onClick={handleFriendRequest}>

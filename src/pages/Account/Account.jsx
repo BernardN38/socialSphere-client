@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ProfileImageUploadForm from '../../components/ProfileImageUploadForm/ProfileImageUploadForm'
+import Notification from '../../components/Notification/Notification';
+
 
 function Account() {
+
   return (
-    <ProfileImageUploadForm/>
+    <div>
+      <ProfileImageUploadForm />
+    </div>
   )
 }
 

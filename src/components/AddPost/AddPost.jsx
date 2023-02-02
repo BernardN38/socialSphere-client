@@ -48,7 +48,7 @@ function AddPost({setRefresh, refresh, userId}) {
                         <Stack direction="row" mt={2} mb={3}>
                             <IconButton><EmojiEmotions color="primary" /></IconButton>
                             <IconButton color="primary" aria-label="upload picture" component="label">
-                                <input hidden accept="image/jpeg, image/png" type="file" name="image" />
+                                <input hidden accept="image" type="file" name="image" />
                                 <PhotoCameraIcon />
                             </IconButton>
                         </Stack>
