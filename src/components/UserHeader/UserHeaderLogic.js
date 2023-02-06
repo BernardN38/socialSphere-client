@@ -4,11 +4,11 @@ import { serverUrl } from "../../config";
 
 function UserHeaderLogic(userId) {
     const [userData, setUserData] = useState({});
-    const handleFriendRequest = (e) => {
+    const handleFriendFollow = (e) => {
         e.preventDefault();
         let data = {};
 
-        axios.post(`${serverUrl}/friends/friendships/${userId}`, {}, { withCredentials: true }).then((resp) => {
+        axios.post(`${serverUrl}/friends/${userId}/follow`, {}, { withCredentials: true }).then((resp) => {
            console.log(resp.data)
         }).catch((err) => {
             console.log(err.response)
@@ -17,11 +17,10 @@ function UserHeaderLogic(userId) {
 
     const getUserData = () => {
         axios.get(`${serverUrl}/users/${userId}`, { withCredentials: true }).then((resp) => {
-            console.log(resp.data)
             setUserData(resp.data)
         }).catch((err) => { console.log(err.response) })
     }
-    return { handleFriendRequest, getUserData, userData }
+    return { handleFriendFollow, getUserData, userData }
 }
 
 export default UserHeaderLogic;

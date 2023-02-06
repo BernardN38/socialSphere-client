@@ -10,7 +10,7 @@ import UserHeader from "../../components/UserHeader/UserHeader";
 
 
 function Profile() {
-  let { userId } = useParams();
+  const { userId } = useParams();
   const [refresh, setRefresh] = useState(false);
   const { innerWidth: width, innerHeight: height } = window;
 

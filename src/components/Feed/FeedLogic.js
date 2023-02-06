@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { serverUrl } from '../../config';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,11 @@ function FeedLogic(pageSize = 5, userId ) {
     const [posts, setPosts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const navigate = useNavigate();
+    const visiblePosts = useMemo(
+        ()=>{
+           return  posts
+        },[posts]
+    )
     const getNext = () => {
         console.log("gettting next")
         let pageNo = (posts.length / pageSize) + 1
@@ -31,7 +36,6 @@ function FeedLogic(pageSize = 5, userId ) {
 
     const initFeed = () => {
         axios.get(`${serverUrl}/users/${userId}/posts?pageSize=${pageSize}&pageNo=1`, { withCredentials: true }).then((resp) => {
-            console.log(resp.data)
             setPosts(resp.data.data.page)
         }).catch((error) => {
             console.log(error.response)
@@ -50,7 +54,7 @@ function FeedLogic(pageSize = 5, userId ) {
         setPosts(posts.filter((el, i) => { return el.ImageID !== imageId }))
     }
 
-    return { posts, setPosts, hasMore, setHasMore, getNext, initFeed, navigate, deletePost }
+    return { posts, setPosts, hasMore, setHasMore, getNext, initFeed, navigate, deletePost, visiblePosts }
 }
 
 export default FeedLogic;

@@ -15,7 +15,7 @@ const linkStyles = {
 
 
 function UserHeader({ username, userId }) {
-    const { handleFriendRequest, getUserData, userData } = UserHeaderLogic(userId);
+    const { handleFriendFollow, getUserData, userData } = UserHeaderLogic(userId);
     const navigate = useNavigate();
     useEffect(() => {
         getUserData();
@@ -31,7 +31,7 @@ function UserHeader({ username, userId }) {
                 <Typography>{userData.FirstName} {userData.LastName}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: "center" }}>
-                <Button onClick={handleFriendRequest}>
+                <Button onClick={handleFriendFollow}>
                     Follow
                     <AddIcon />
                 </Button>

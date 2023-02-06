@@ -1,39 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Badge, Box, Menu, MenuItem, Alert,AlertTitle, Stack } from '@mui/material';
+import { Badge, Box, Menu, MenuItem, Alert, AlertTitle, Stack } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useOutletContext } from "react-router-dom";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
+import { v4 as uuid } from "uuid"
+import NewMessageAlert from './NewMessageAlert';
 
 
-const NotificationTypes = {
-    "newMessage":{
-        title:"New Message",
-        severity:"info"
-    },
-    "newFollow":{
-        title:"New Follow",
-        severity:"success"
-    }
-}
-function Notification() {
+function Notification({ userId }) {
     const [notifications, setNotifications] = useState([]);
-    // const [userId, setUserId] = useOutletContext();
     const [anchorEl, setAnchorEl] = useState(null);
     const webSocket = useRef(null);
 
     const connect = () => {
-        let Sock = new SockJS('http://localhost:8088/ws');
+        let Sock = new SockJS('http://192.168.0.17:8088/ws');
         webSocket.current = over(Sock);
         webSocket.current.connect({}, onConnected, onError);
     }
 
     const onConnected = () => {
-        webSocket.current.subscribe(`/user/${1}/notifications`, onMessage);
+        console.log(userId)
+        webSocket.current.subscribe(`/user/${userId}/notifications`, onMessage);
     }
 
     const onMessage = (payload) => {
-        console.log(payload, notifications);
         const data = JSON.parse(payload.body);
         console.log(data)
         setNotifications((prevState) => {
@@ -42,7 +33,7 @@ function Notification() {
     }
 
     const onError = (err) => {
-        console.log(err, "aasdfs", "dafsdfsdfsdf");
+        console.log(err);
     }
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -57,7 +48,7 @@ function Notification() {
     return (
         <Box>
             <Badge badgeContent={notifications.length} color="primary" onClick={handleMenu}>
-                <NotificationsIcon color="" />
+               {notifications.length > 0 ?  <NotificationsIcon color="" /> : <NotificationsNoneIcon/>}
             </Badge>
             <Menu
                 id="menu-appbar"
@@ -74,21 +65,13 @@ function Notification() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Stack sx={{ width: '100%', margin:"0" }} spacing={0.25}>
+                <Stack sx={{ width: '100%', margin: "0" }} spacing={0.25}>
                     {notifications.map((el, i) => {
-
                         return (
-
-                            
-                                <Alert severity={NotificationTypes[el.type].severity}>
-                                    <AlertTitle>{NotificationTypes[el.type].title}</AlertTitle>
-                                    {el.message}
-                                </Alert>
-
-                            
+                            <NewMessageAlert key={uuid()} notification={el} />
                         )
                     })}
-               </Stack>
+                </Stack>
             </Menu>
         </Box>
     )

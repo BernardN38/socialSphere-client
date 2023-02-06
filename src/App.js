@@ -4,6 +4,7 @@ import Layout from "./pages/Layout/Layout";
 import Login from "./pages/Login/Login";
 import Account from "./pages/Account/Account";
 import Friends from "./pages/Friends/Friends";
+import Messages from "./pages/Messages/Messages";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Login/>}/>
           <Route path="users/:userId" element={<Profile />} />
+          <Route path="chat/:userId" element={<Messages/>}/>
           <Route path="login" element={<Login/>}/>
           <Route path="account" element={<Account/>}/>
           <Route path="friends" element={<Friends/>}/>

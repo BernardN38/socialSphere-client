@@ -16,16 +16,16 @@ const endMessage = () => {
 }
 
 function Feed({ pageSize = 5, userId, refresh }) {
-  const { posts, setPosts, hasMore, getNext, initFeed, deletePost } = FeedLogic(pageSize, userId);
+  const { hasMore, getNext, initFeed, deletePost, visiblePosts } = FeedLogic(pageSize, userId);
   useEffect(() => {
     initFeed();
   }, [userId, refresh])
   return (
-    <Box flex={4} p={2}>
+    <Box flex={4} p={2} sx={{}}>
     <UserHeader userId={userId}/>
-    {posts ?
+    {visiblePosts ?
         <InfiniteScroll
-          dataLength={posts.length} //This is important field to render the next data
+          dataLength={visiblePosts.length} //This is important field to render the next data
           next={e => getNext(pageSize)}
           hasMore={hasMore}
           loader={<h4>Loading...</h4>}
@@ -42,7 +42,7 @@ function Feed({ pageSize = 5, userId, refresh }) {
           
         >
           {
-            posts.map((el) => <Post key={el.ID} postId={el.ID} authorName={el.AuthorName} userId={el.UserID}body={el.Body} date={el.CreatedAt} imageId={el.ImageID} deletePost={deletePost} likeCount={el.Likecount}/>)
+            visiblePosts.map((el) => <Post key={el.ID} postId={el.ID} authorName={el.AuthorName} userId={el.UserID}body={el.Body} date={el.CreatedAt} imageId={el.ImageID} deletePost={deletePost} likeCount={el.Likecount}/>)
           }
         </InfiniteScroll> : "Nothing to see here"}
     </Box>

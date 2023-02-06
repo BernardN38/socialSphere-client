@@ -11,12 +11,7 @@ const SyledToolbar = styled(Toolbar)({
   justifyContent: "space-between"
 })
 
-const Search = styled("div")(({ theme }) => ({
-  backgroundColor: "white",
-  padding: "0 10px",
-  borderRadius: theme.shape.borderRadius,
-  width: "40%"
-}))
+
 
 const Icons = styled(Box)(({ theme }) => ({
   display: "none",
@@ -48,21 +43,20 @@ const linkStyles = {
 
 function Navbar({ userId }) {
   const { navigate, handleClick, handleClose, setAnchorEl, anchorEl, open, getImage } = NavbarLogic();
-
+  const { innerWidth: width, innerHeight: height } = window;
   return (
     <AppBar position='sticky'>
       <SyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", ms: "block" } }}>SocialSphere</Typography>
         <PublicIcon style={linkStyles} sx={{ display: { xs: "block", ms: "none" } }} onClick={e => navigate(`/users/${userId}`)} />
         <Icons>
-          {/* <Notification /> */}
-
-          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/profileImage`} />
+          
+          {width > 500 ? <Notification  userId={userId}/> : ""}
+          <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/${userId}/profileImage`} />
         </Icons>
         <UserBox >
-        <Notification />
+        {width < 500 ? <Notification  userId={userId}/> : ""}
           <Avatar sx={{ width: "30", height: "30" }} src={`${serverUrl}/users/${userId}/profileImage`} onClick={handleClick} />
-          {/* <Typography variant='span'>John</Typography> */}
         </UserBox>
       </SyledToolbar>
       <Menu
