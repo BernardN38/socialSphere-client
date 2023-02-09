@@ -8,9 +8,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from '../../config';
 import { useOutletContext } from "react-router-dom";
+
 const bodyScrollLock = require('body-scroll-lock');
 const disableBodyScroll = bodyScrollLock.disableBodyScroll;
-const enableBodyScroll = bodyScrollLock.enableBodyScroll;
+
+
+
 function Messages() {
     let { userId } = useParams();
     const [messages, setMessages] = useState([]);
@@ -67,7 +70,6 @@ function Messages() {
                     flexDirection: "column-reverse"
                 }}>
                     {messages.map((el, i) => {
-                        console.log(messages)
                         let key = uuid();
                         return (
                             selfUserId == el.toUserId ? (<LeftMessage key={key} message={el} />) : (<RightMessage key={key} message={el} />)
@@ -89,7 +91,7 @@ function Messages() {
 function RightMessage({ message }) {
     return (
         <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "4px", }}>
-            <Card sx={{ minWidth: 200, backgroundColor: "#2196f3", }}>
+            <Card sx={{ minWidth: 210, backgroundColor: "#2196f3", }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
 
                     <Typography variant="body2">
@@ -112,7 +114,7 @@ function RightMessage({ message }) {
 function LeftMessage({ message }) {
     return (
         <Box sx={{ display: "flex", justifyContent: "flex-start", marginTop: "4px" }}>
-            <Card sx={{ minWidth: 275, backgroundColor: "#1de9b6" }}>
+            <Card sx={{ minWidth: 210, backgroundColor: "#1de9b6" }}>
                 <CardContent>
 
                     <Typography variant="body2">

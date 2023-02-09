@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Rightbar() {
   const [messages, setMessges] = useState({});
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState({});
   const [images, setImages] = useState([]);
   const client = useRef(null);
 
@@ -32,7 +32,8 @@ function Rightbar() {
       // console.log(event)
       const jsonData = JSON.parse(event.data)
       console.log(jsonData)
-      setMessges({ ...messages, [jsonData.fromUsername]: { from: jsonData.fromUserId, subject: jsonData.subject, message: jsonData.message } })
+      setExpanded(expanded => {return {...expanded,[jsonData.fromUsername]:false}})
+      setMessges(messages => { return {...messages, [jsonData.fromUsername]: { from: jsonData.fromUserId, subject: jsonData.subject, message: jsonData.message } }})
     };
   }
 
@@ -40,7 +41,7 @@ function Rightbar() {
   function sendWsMessage(e, toId) {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
-    const json = JSON.stringify({ message: form.get("message"), toUserId: new Number(form.get("toUserId")) || new Number(toId), subject: form.get("subject") })
+    const json = JSON.stringify({ message: form.get("message"), toUserId: new Number(form.get("toUserId")||toId) || new Number(toId), subject: form.get("subject") })
     console.log(json)
     client.current.send(json)
   }
@@ -72,9 +73,9 @@ function Rightbar() {
           {images.length > 0 ? (
             images.map((el, i) => {
               return (
-              <ImageListItem key={uuid()} onClick={()=>{navigate(`/users/${el.FriendB}`)}}>
-                <img src={`${serverUrl}/image/${el.LastImageID}`} onError={()=>{setImages(images.filter((img,i)=>{return img.LastImageID != el.LastImageID  }))}} />
-              </ImageListItem>)
+                <ImageListItem key={uuid()} onClick={() => { navigate(`/users/${el.FriendB}`) }}>
+                  <img src={`${serverUrl}/image/${el.LastImageID}`} onError={() => { setImages(images.filter((img, i) => { return img.LastImageID != el.LastImageID })) }} />
+                </ImageListItem>)
             })
           )
             : ""}
@@ -111,14 +112,13 @@ function Rightbar() {
                       </React.Fragment>
                     }
                   />
-                  <Button onClick={() => { setExpanded(true) }} >reply</Button>
+                  <Button onClick={() => { setExpanded(expanded => {return {...expanded,[key]:!expanded[key]}}) }} >reply</Button>
                 </ListItem>
                 <Divider variant="inset" component="li" />
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={expanded[key]} timeout="auto" unmountOnExit>
                   <Box sx={{ display: "flex", alignItems: "center", justifyContent: "right", width: "100%", marginBottom: "3px" }}>
                     <form onSubmit={(e) => {
                       sendWsMessage(e, messages[key]["from"]);
-                      console.log(e.target)
                     }}>
                       <TextField id="standard-basic" label="Reply" variant="standard" name='message' />
                       <Button type="submit" size='large'><SendIcon /></Button>

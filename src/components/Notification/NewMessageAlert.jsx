@@ -15,11 +15,11 @@ const NotificationTypes = {
 
 function NewMessageAlert({ notification }) {
     const navigate = useNavigate();
-    console.log(notification.payload)
+    const payload = JSON.parse(notification.payload)
     return (
-        <Alert key={uuid()} onClick={()=>{navigate(`/chat/${notification.payload.fromUserId}`)}} severity={NotificationTypes[notification.type].severity}>
-            <AlertTitle>{NotificationTypes[notification.type].title} {` from ${notification.fromUsername}`}</AlertTitle>
-            Subject: {notification.payload.subject}
+        <Alert key={uuid()} onClick={()=>{navigate(`/chat/${payload.fromUserId}`)}} severity={NotificationTypes[notification.type].severity}>
+            <AlertTitle>{NotificationTypes[notification.type].title} {` from ${payload.fromUsername}`}</AlertTitle>
+            Subject: {payload.subject||""}
         </Alert>
     )
 }

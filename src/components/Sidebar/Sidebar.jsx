@@ -32,7 +32,7 @@ function Sidebar() {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton component="a" >
+            <ListItemButton component="a" onClick={()=>{navigate('/inbox')}}>
               <ListItemIcon>
                 <EmailIcon />
               </ListItemIcon>
